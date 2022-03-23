@@ -1,23 +1,17 @@
-# Our Node base image
-FROM node:14.16.1
-
-# Set the Node environment to development to ensure all packages are installed
-ENV NODE_ENV development
-
-# Change our current working directory
-WORKDIR /usr/src/app
-
-# Copy over `package.json` and lock files to optimize the build process
-COPY ["package.json", "package-lock.json*", "./"]
-# Install Node modules
-RUN npm install
-
-# Copy over rest of the project files
+FROM node:16.13.1-alpine3.14 AS builder
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
+RUN npm run build && npm prune -- production
 
-# Expose port 3000 for the SvelteKit app and 24678 for Vite's HMR
-EXPOSE 3000
-EXPOSE 24678
 
-# Run `yarn dev` and set the host to 0.0.0.0 so we can access the web app from outside
-CMD ["npm", "run", "dev"]
+FROM node:16.13.1-alpine3.14
+USER node:node
+WORKDIR /app
+COPY --from=builder --chown=node:node /app/build ./build
+COPY --from=builder --chown=node:node /app/node_modules ./node_modules
+COPY --chown=node:node package.json .
+ENV PORT 5050
+EXPOSE 5050
+CMD ["node", "build"]
