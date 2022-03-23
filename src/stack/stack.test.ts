@@ -21,10 +21,10 @@ describe('Stack', () => {
   it('can pop off', () => {
     stack.items = {
       0: '🍿',
-      1: '🍔',
+      1: '🍪',
     };
     stack.top = 1;
     expect(stack.top).toBe(1);
-    expect(stack.pop).toBe('🍔');
+    expect(stack.pop).toBe('🍪');
   });
 })
