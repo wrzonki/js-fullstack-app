@@ -15,8 +15,8 @@
     "test": "jest",
     "test:watch": "jest --watchAll --verbose",
     "test:coverage": "jest --coverage",
-    "docker:build": "docker build . -t sveltekit:alpine-multistage",
-    "docker:run": "docker run -d -p 5050:5050 --name sveltekit-app sveltekit:alpine-multistage",
+    "docker:build": "docker build . -t wrzonki/sveltekit:0.0.1",
+    "docker:run": "docker run -d -p 5050:5050 --name sveltekit-app wrzonki/sveltekit:0.0.1",
     "docker:images": "docker images"
   },
   "devDependencies": {
